@@ -43,7 +43,10 @@ let subst_dict =
           [ name, None ]
       | _ ->
           failwith ("bad arity for operator "^ name) in
-    let var_is_null v = v = Some "" || v = Some "0" || v = Some "false" || v = None in
+    let var_is_null v =
+      match v with
+      | Some ("" | "0" | "false") | None -> true
+      | _ -> v = null in
     let filter_of_name = function
       | "int" ->
           foreach (string_of_int % int_of_float % float_of_string)
