@@ -43,6 +43,7 @@ let subst_dict =
           [ name, None ]
       | _ ->
           failwith ("bad arity for operator "^ name) in
+    let var_is_null v = v = Some "" || v = Some "0" || v = Some "false" || v = None in
     let filter_of_name = function
       | "int" ->
           foreach (string_of_int % int_of_float % float_of_string)
@@ -74,8 +75,7 @@ let subst_dict =
           | if_true, if_false ->
               List.map (fun (n, v) ->
                 n,
-                if v = Some "" || v = Some "0" || v = Some "false" || v = None
-                then Some if_false else Some if_true))
+                if var_is_null v then Some if_false else Some if_true))
       (* Some arithmetic operations useful to manipulate scales: *)
       | f when String.length f > 2 && f.[0] = '*' && f.[1] = '=' ->
           arithmetic ( *. ) f
