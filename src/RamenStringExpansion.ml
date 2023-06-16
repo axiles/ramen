@@ -69,6 +69,10 @@ let subst_dict =
           binary_filter "sum" (+.)
       | "diff" ->
           binary_filter "diff" (-.)
+      | "coalesce" ->
+          let coalesce = List.find_map (fun (n, v) ->
+            if var_is_null v then None else Some (n, v)) in
+          fun vars -> [coalesce vars]
       (* Special syntax for trinary operator: ${a|?b:c} will be b or c
        * depending on the truth-ness of a: (ocaml parser: |a})*)
       | f when String.length f > 1 && f.[0] = '?' ->
